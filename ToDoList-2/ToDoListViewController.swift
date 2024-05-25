@@ -7,15 +7,16 @@
 
 import UIKit
 
-class ToDoListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ToDoListViewController: UIViewController, UITableViewDataSource {
 
     lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         return tableView
     }()
+    
+    let toDoItems: [ToDoItem] = DummyData
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,25 +34,28 @@ class ToDoListViewController: UIViewController, UITableViewDelegate, UITableView
         ])
     }
     // MARK: - UITableViewDataSource
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
-    }
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 3
+//    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return toDoItems.count
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch (section) {
-        case 0: return "High"
-        case 1: return "Medium"
-        case 2: return "Low"
-        default: return nil
-        }
-    }
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        switch (section) {
+//        case 0: return "High"
+//        case 1: return "Medium"
+//        case 2: return "Low"
+//        default: return nil
+//        }
+//    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Test"
+        let toDoItem = toDoItems[indexPath.row]
+        cell.textLabel?.text = toDoItem.title
+        cell.accessoryType = toDoItem.isCompleted ? .checkmark : .none
+        
         return cell
     }
 }
