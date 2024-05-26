@@ -12,7 +12,7 @@ class ToDoListViewController: UIViewController, UITableViewDataSource {
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(ToDoTableViewCell.self, forCellReuseIdentifier: "ToDoCell")
         return tableView
     }()
     
@@ -34,26 +34,15 @@ class ToDoListViewController: UIViewController, UITableViewDataSource {
         ])
     }
     // MARK: - UITableViewDataSource
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 3
-//    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return toDoItems.count
     }
     
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        switch (section) {
-//        case 0: return "High"
-//        case 1: return "Medium"
-//        case 2: return "Low"
-//        default: return nil
-//        }
-//    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath) as! ToDoTableViewCell
         let toDoItem = toDoItems[indexPath.row]
-        cell.textLabel?.text = toDoItem.title
+        cell.titleLabel.text = toDoItem.title
+        cell.priorityLabel.text = toDoItem.priority.rawValue
         cell.accessoryType = toDoItem.isCompleted ? .checkmark : .none
         
         return cell
