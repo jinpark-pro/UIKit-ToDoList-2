@@ -7,7 +7,12 @@
 
 import UIKit
 
+protocol AddToDoViewControllerDelegate {
+    func saveToDo(_ toDoItem: ToDoItem)
+}
 class AddToDoViewController: UIViewController {
+    var delegate: AddToDoViewControllerDelegate?
+    
     lazy var mainContainer: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -26,12 +31,14 @@ class AddToDoViewController: UIViewController {
         segmentedControl.selectedSegmentIndex = 0
         return segmentedControl
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.title = "Add ToDo"
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelAdd))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveToDo))
+        
         mainContainer.addArrangedSubview(titleTextField)
         mainContainer.addArrangedSubview(prioritySegment)
         view.addSubview(mainContainer)
@@ -59,6 +66,10 @@ class AddToDoViewController: UIViewController {
         dismiss(animated: true)
     }
     @objc func saveToDo() {
-        
+        guard let title = titleTextField.text, !title.isEmpty else { return }
+        let priority = Priority.allCases[prioritySegment.selectedSegmentIndex]
+        let newToDo = ToDoItem(title: title, isCompleted: false, priority: priority)
+        delegate?.saveToDo(newToDo)
+        dismiss(animated: true)
     }
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ToDoListViewController: UIViewController, UITableViewDataSource {
+class ToDoListViewController: UIViewController, AddToDoViewControllerDelegate, UITableViewDataSource {
 
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -16,7 +16,7 @@ class ToDoListViewController: UIViewController, UITableViewDataSource {
         return tableView
     }()
     
-    let toDoItems: [ToDoItem] = DummyData
+    var toDoItems: [ToDoItem] = DummyData
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,8 +39,15 @@ class ToDoListViewController: UIViewController, UITableViewDataSource {
     @objc func newToDo() {
         let addToDoViewController = AddToDoViewController()
         let navController = UINavigationController(rootViewController: addToDoViewController)
+        addToDoViewController.delegate = self
         present(navController, animated: true)
     }
+    
+    func saveToDo(_ toDoItem: ToDoItem) {
+        toDoItems.append(toDoItem)
+        tableView.reloadData()
+    }
+    
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return toDoItems.count
