@@ -25,6 +25,7 @@ class ToDoListViewController: UIViewController, UITableViewDataSource {
         view.addSubview(tableView)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        
         let safeArea = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
@@ -32,6 +33,13 @@ class ToDoListViewController: UIViewController, UITableViewDataSource {
             tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
         ])
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newToDo))
+    }
+    @objc func newToDo() {
+        let addToDoViewController = AddToDoViewController()
+        let navController = UINavigationController(rootViewController: addToDoViewController)
+        present(navController, animated: true)
     }
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
