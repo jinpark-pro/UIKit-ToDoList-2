@@ -16,7 +16,7 @@ class ToDoListViewController: UIViewController, AddToDoViewControllerDelegate, U
         return tableView
     }()
     
-    var toDoItems: [ToDoItem] = DummyData
+    var toDoItems: [ToDoItem] = SharedData.shared.getAllToDoItems()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +35,7 @@ class ToDoListViewController: UIViewController, AddToDoViewControllerDelegate, U
         ])
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newToDo))
+        SharedData.shared.loadToDoItemsData()
     }
     @objc func newToDo() {
         let addToDoViewController = AddToDoViewController()
@@ -44,18 +45,19 @@ class ToDoListViewController: UIViewController, AddToDoViewControllerDelegate, U
     }
     
     func saveToDo(_ toDoItem: ToDoItem) {
-        toDoItems.append(toDoItem)
+        SharedData.shared.addToDoItem(toDoItem)
+        SharedData.shared.saveToDoItemsData()
         tableView.reloadData()
     }
-    
+
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return toDoItems.count
+        return SharedData.shared.getAllToDoItems().count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath) as! ToDoTableViewCell
-        let toDoItem = toDoItems[indexPath.row]
+        let toDoItem = SharedData.shared.getToDoItem(at: indexPath.row)
         cell.titleLabel.text = toDoItem.title
         cell.priorityLabel.text = toDoItem.priority.rawValue
         cell.accessoryType = toDoItem.isCompleted ? .checkmark : .none

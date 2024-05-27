@@ -7,11 +7,11 @@
 
 import UIKit
 
-protocol AddToDoViewControllerDelegate {
+protocol AddToDoViewControllerDelegate: NSObject {
     func saveToDo(_ toDoItem: ToDoItem)
 }
 class AddToDoViewController: UIViewController {
-    var delegate: AddToDoViewControllerDelegate?
+    weak var delegate: AddToDoViewControllerDelegate?
     
     lazy var mainContainer: UIStackView = {
         let stackView = UIStackView()
